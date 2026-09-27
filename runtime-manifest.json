@@ -3,11 +3,11 @@
   "repository": "BlueBox-Runtimes",
   "components": {
     "box64": {
-      "enabled": false,
-      "version": "",
+      "enabled": true,
+      "version": "development-1",
       "architecture": "arm64",
-      "downloadUrl": "",
-      "sha256": ""
+      "downloadUrl": "https://github.com/RimvydopOfficial/BlueBox-Runtimes/releases/download/box64-development-1/box64-arm64.zip",
+      "sha256": "73646fd5c84e4a0838bbd7a58b91e7478cdbe90053aa36ee5cca75eaa95667ff"
     },
     "wine": {
       "enabled": false,
