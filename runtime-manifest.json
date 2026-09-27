@@ -1,0 +1,48 @@
+{
+  "formatVersion": 1,
+  "repository": "BlueBox-Runtimes",
+  "components": {
+    "box64": {
+      "enabled": false,
+      "version": "",
+      "architecture": "arm64",
+      "downloadUrl": "",
+      "sha256": ""
+    },
+    "wine": {
+      "enabled": false,
+      "version": "",
+      "architecture": "arm64",
+      "downloadUrl": "",
+      "sha256": ""
+    },
+    "dxvk": {
+      "enabled": false,
+      "version": "",
+      "architecture": "universal",
+      "downloadUrl": "",
+      "sha256": ""
+    },
+    "vkd3d": {
+      "enabled": false,
+      "version": "",
+      "architecture": "universal",
+      "downloadUrl": "",
+      "sha256": ""
+    },
+    "turnip": {
+      "enabled": false,
+      "version": "",
+      "architecture": "arm64",
+      "downloadUrl": "",
+      "sha256": ""
+    },
+    "virgl": {
+      "enabled": false,
+      "version": "",
+      "architecture": "arm64",
+      "downloadUrl": "",
+      "sha256": ""
+    }
+  }
+}
