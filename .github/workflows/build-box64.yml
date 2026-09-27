@@ -1,0 +1,98 @@
+name: Build BlueBox Box64
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-box64:
+    name: Build Box64 ARM64
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout BlueBox-Runtimes
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            git \
+            cmake \
+            make \
+            gcc-aarch64-linux-gnu \
+            binutils-aarch64-linux-gnu \
+            python3 \
+            zip
+
+      - name: Checkout official Box64
+        uses: actions/checkout@v4
+        with:
+          repository: ptitSeb/box64
+          ref: main
+          path: box64-source
+
+      - name: Configure Box64
+        working-directory: box64-source
+        run: |
+          mkdir -p build
+          cd build
+
+          cmake .. \
+            -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc \
+            -DARM64=1 \
+            -DARM_DYNAREC=ON \
+            -DWINLATOR_GLIBC=ON \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Box64
+        working-directory: box64-source/build
+        run: |
+          make -j$(nproc)
+
+      - name: Validate ARM64 binary
+        run: |
+          test -f box64-source/build/box64
+
+          file box64-source/build/box64
+
+          aarch64-linux-gnu-readelf -h \
+            box64-source/build/box64
+
+      - name: Create BlueBox package
+        run: |
+          mkdir -p package/bin
+
+          cp box64-source/build/box64 \
+            package/bin/box64
+
+          chmod +x package/bin/box64
+
+          cat > package/bluebox-runtime.json <<'EOF'
+          {
+            "formatVersion": 1,
+            "component": "box64",
+            "version": "development",
+            "architecture": "arm64",
+            "displayName": "Box64"
+          }
+          EOF
+
+          cd package
+          zip -r ../box64-arm64.zip .
+          cd ..
+
+      - name: Calculate SHA-256
+        run: |
+          sha256sum box64-arm64.zip | tee box64-arm64.sha256
+
+      - name: Upload BlueBox Box64 package
+        uses: actions/upload-artifact@v4
+        with:
+          name: BlueBox-Box64-ARM64
+          path: |
+            box64-arm64.zip
+            box64-arm64.sha256
+          if-no-files-found: error
